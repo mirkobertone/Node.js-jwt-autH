@@ -8,6 +8,7 @@ const verify = require('./verifyToken');
 router.post('/register', async (req, res) => {
   //VALIDATE USER BEFORE ADD IT
   try {
+    console.log(req.body)
     const { value } = await registerValidation(req.body);
     console.log('TRY register validation');
   } catch (err) {
@@ -16,24 +17,32 @@ router.post('/register', async (req, res) => {
   }
 
   //CHECK IF EMAIL ALREADY EXISTS
-  // prettier-ignore
-  const value = await User.findOne({ "email": req.body.email }, function(err, found) {
+  const value = await User.findOne({ email: req.body.email }, function (
+    err,
+    found
+  ) {
     if (err) return 'Error in findOne in DB';
     if (found) return 'Email already exists';
   });
   if (value) return res.status(400).send('Email already exists');
 
+  //CHECK PASSWORD
+  const pw1 = req.body.password1;
+  const pw2 = req.body.password2;
+  if (pw1 != pw2) return res.status(400).send('Passwords do not match');
+
   //HASH PASSWORD!  --  Usage - Sync
   const salt = await bcrypt.genSalt(10);
-  const hashedPasswor = await bcrypt.hashSync(req.body.password, salt);
+  const hashedPassword = await bcrypt.hashSync(req.body.password1, salt);
   console.log(salt);
-  console.log(hashedPasswor);
+  console.log(hashedPassword);
 
   //VALIDATION IN PASSED
   const user = new User({
-    name: req.body.name,
+    firstname: req.body.firstName,
+    lastname: req.body.lastName,
     email: req.body.email,
-    password: hashedPasswor
+    password: hashedPassword
   });
 
   //DATA PERSISTENCE
@@ -58,7 +67,7 @@ router.post('/login', async (req, res) => {
 
   //CHECK IF EMAIL ALREADY EXISTS
   // prettier-ignore
-  const user = await User.findOne({ "email": req.body.email }, function(err, found) {
+  const user = await User.findOne({ "email": req.body.email }, function (err, found) {
     if (err) return 'Error in findOne in DB';
     if (found) return 'Email already exists';
   });
@@ -71,7 +80,7 @@ router.post('/login', async (req, res) => {
 
   //Create and assign a token
   // prettier-ignore
-  const token = jwt.sign({ _id: user._id, name:user.name }, process.env.TOKEN_SECRET);
+  const token = jwt.sign({ _id: user._id, name: user.name }, process.env.TOKEN_SECRET);
   res.header('auth-token', token).send(token);
   //res.send('Logged in!');
 });
