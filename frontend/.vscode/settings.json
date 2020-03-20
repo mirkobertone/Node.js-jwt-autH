@@ -1,0 +1,7 @@
+{
+    "prettier.htmlWhitespaceSensitivity": "ignore",
+    "prettier.disableLanguages": [
+        "html",
+        ".html"
+    ]
+}
