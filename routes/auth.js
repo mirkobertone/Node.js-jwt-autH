@@ -13,7 +13,7 @@ router.post('/register', async (req, res) => {
     console.log('TRY register validation');
   } catch (err) {
     console.log('CATH register validation');
-    return res.status(400).send(err);
+    return res.status(400).send(err.details[0].message);
   }
 
   //CHECK IF EMAIL ALREADY EXISTS
@@ -63,14 +63,14 @@ router.post('/login', async (req, res) => {
     console.log('TRY login validation');
   } catch (err) {
     console.log('CATH login validation');
-    return res.status(400).send(err);
+    return res.status(400).send(err.details[0].message);
   }
 
   //CHECK IF EMAIL ALREADY EXISTS
   // prettier-ignore
   const user = await User.findOne({ "email": req.body.email }, function (err, found) {
+    console.log(found)
     if (err) return 'Error in findOne in DB';
-    if (found) return 'Email already exists';
   });
   //email not found
   if (!user) return res.status(400).send('Email or password is wrong');
@@ -95,11 +95,11 @@ router.post('/login', async (req, res) => {
 
   console.log(usrResp);
   console.log('Invio token');
-  res.send(usrResp);
+  return res.send(usrResp);
   //res.send('Logged in!');
 });
 
-router.get('/verify', verify, (req, res) => {
+router.get('/verify', verify('ciao'), (req, res) => {
   console.log(req.user);
   res.status(200).send('!!VERIFICATO!!');
 });
