@@ -8,7 +8,7 @@ const verify = require('./verifyToken');
 router.post('/register', async (req, res) => {
   //VALIDATE USER BEFORE ADD IT
   try {
-    console.log(req.body)
+    console.log(req.body);
     const { value } = await registerValidation(req.body);
     console.log('TRY register validation');
   } catch (err) {
@@ -17,7 +17,7 @@ router.post('/register', async (req, res) => {
   }
 
   //CHECK IF EMAIL ALREADY EXISTS
-  const value = await User.findOne({ email: req.body.email }, function (
+  const value = await User.findOne({ email: req.body.email }, function(
     err,
     found
   ) {
@@ -58,6 +58,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   //VALIDATE USER INPUT AT LOGIN
   try {
+    console.log(req.body);
     const { value } = await loginValidation(req.body);
     console.log('TRY login validation');
   } catch (err) {
@@ -78,15 +79,29 @@ router.post('/login', async (req, res) => {
   if (!isPasswordValid)
     return res.status(400).send('Email or password is wrong');
 
-  //Create and assign a token
+  //CREATE AND ASSIGN TOKEN
+  //FORMAT OF TOKEN
+  //Authorization: Bearer <access_token>
   // prettier-ignore
-  const token = jwt.sign({ _id: user._id, name: user.name }, process.env.TOKEN_SECRET);
-  res.header('auth-token', token).send(token);
+  const token = jwt.sign({ _id: user._id, email: user.email }, process.env.TOKEN_SECRET);
+
+  //USER_ODT
+  usrResp = {
+    firstName: user.firstname,
+    lastName: user.lastname,
+    email: user.email,
+    token: token
+  };
+
+  console.log(usrResp);
+  console.log('Invio token');
+  res.send(usrResp);
   //res.send('Logged in!');
 });
 
-router.get('/', verify, (req, res) => {
-  res.send('!!VERIFICATO!!');
+router.get('/verify', verify, (req, res) => {
+  console.log(req.user);
+  res.status(200).send('!!VERIFICATO!!');
 });
 
 module.exports = router;
