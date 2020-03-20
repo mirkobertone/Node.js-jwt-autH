@@ -99,7 +99,7 @@ router.post('/login', async (req, res) => {
   //res.send('Logged in!');
 });
 
-router.get('/verify', verify('ciao'), (req, res) => {
+router.get('/verify', verify, (req, res) => {
   console.log(req.user);
   res.status(200).send('!!VERIFICATO!!');
 });

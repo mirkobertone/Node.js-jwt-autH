@@ -17,23 +17,20 @@ const jwt = require('jsonwebtoken');
   }
 }; */
 
-module.exports = function(param) {
+module.exports = function(req, res, next) {
   console.log('Verifica Token');
-  console.log(param);
-  return function(req, res, next) {
-    const bearerHeader = req.headers['authorization'];
-    console.log(bearerHeader);
-    if (bearerHeader === undefined)
-      return res.status(401).send('Access Denied');
-    try {
-      const bearerToken = bearerHeader.split(' ')[1];
-      console.log(bearerToken);
-      const decodedToken = jwt.verify(bearerToken, process.env.TOKEN_SECRET);
-      req.user = decodedToken;
-      console.log(req.user);
-      next();
-    } catch (err) {
-      res.status(400).send('Invalid Token');
-    }
-  };
+
+  const bearerHeader = req.headers['authorization'];
+  console.log(bearerHeader);
+  if (bearerHeader === undefined) return res.status(401).send('Access Denied');
+  try {
+    const bearerToken = bearerHeader.split(' ')[1];
+    console.log(bearerToken);
+    const decodedToken = jwt.verify(bearerToken, process.env.TOKEN_SECRET);
+    req.user = decodedToken;
+    console.log(req.user);
+    next();
+  } catch (err) {
+    res.status(400).send('Invalid Token');
+  }
 };
