@@ -1,6 +1,6 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
-import { ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -55,7 +55,12 @@ import { LoginComponent } from "./login/login.component";
 import { AuthGuard } from "./_guard/auth.guard";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { JwtInterceptor } from "./_service/jwt.interceptor";
-import { AlertComponent } from './alert/alert.component';
+import { AlertComponent } from "./alert/alert.component";
+import {
+  MeetingsComponent,
+  DialogAddNewMeeting,
+  DialogEditMeeting
+} from "./meetings/meetings.component";
 
 const appRoutes: Routes = [
   { path: "", component: HomeComponent, canActivate: [AuthGuard] },
@@ -67,12 +72,16 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
+  entryComponents: [DialogAddNewMeeting, DialogEditMeeting],
   declarations: [
     AppComponent,
     RegisterComponent,
     HomeComponent,
     LoginComponent,
-    AlertComponent
+    AlertComponent,
+    MeetingsComponent,
+    DialogAddNewMeeting,
+    DialogEditMeeting
   ],
   imports: [
     RouterModule.forRoot(
@@ -128,7 +137,8 @@ const appRoutes: Routes = [
     MatTooltipModule,
     MatTreeModule,
     PortalModule,
-    ScrollingModule
+    ScrollingModule,
+    FormsModule
     //RouterModule.forRoot([{ path: "login", component: LoginComponent }])
   ],
   providers: [

@@ -16,7 +16,7 @@
             [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" />
         <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
             <div *ngIf="f.lastName.errors.required">Last Name is required</div>
-            <div *ngIf="f.lastName.errors.required">Last name must be at least 4 characters</div>
+            <div *ngIf="f.lastName.errors.minlength">Last name must be at least 4 characters</div>
 
         </div>
     </div>
@@ -30,24 +30,31 @@
 
         </div>
     </div>
-    <div class="form-group">
-        <label for="password1">Password</label>
-        <input type="password" formControlName="password1" class="form-control"
-            [ngClass]="{ 'is-invalid': submitted && f.password1.errors }" />
-        <div *ngIf="submitted && f.password1.errors" class="invalid-feedback">
-            <div *ngIf="f.password1.errors.required">Password is required</div>
-            <div *ngIf="f.password1.errors.minlength">Password must be at least 6 characters</div>
+    <form [formGroup]="passwordForm">
+        <div class="form-group">
+            <label for="password1">Password</label>
+            <input type="password" formControlName="password1" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && m.password1.errors }" />
+            <div *ngIf="submitted && m.password1.errors" class="invalid-feedback">
+                <div *ngIf="m.password1.errors.required">Password is required</div>
+                <div *ngIf="m.password1.errors.minlength">Password must be at least 6 characters</div>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label for="password2">Retype Password</label>
-        <input type="password" formControlName="password2" class="form-control"
-            [ngClass]="{ 'is-invalid': submitted && f.password2.errors }" />
-        <div *ngIf="submitted && f.password2.errors" class="invalid-feedback">
-            <div *ngIf="f.password2.errors.required">Password is required</div>
-            <div *ngIf="f.password2.errors.minlength">Password must be at least 6 characters</div>
+        <div class="form-group">
+            <label for="password2">Retype Password</label>
+            <input type="password" formControlName="password2" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && m.password2.errors }" />
+            <div *ngIf="submitted && m.password2.errors" class="invalid-feedback">
+                <div *ngIf="m.password2.errors.required">Password is required</div>
+                <div *ngIf="m.password2.errors.minlength">Password must be at least 6 characters</div>
+                <!--      <div *ngIf="registerForm.hasError('notMatch')"> Passwords don't match</div>
+            <div *ngIf="registerForm.errors?.notMatch"> Passwords don't match</div> -->
+                <div *ngIf="m.password2.errors.notMatch"> Passwords don't match</div>
+
+
+            </div>
         </div>
-    </div>
+    </form>
     <div class="form-group">
         <button [disabled]="loading" class="btn btn-primary">
             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>

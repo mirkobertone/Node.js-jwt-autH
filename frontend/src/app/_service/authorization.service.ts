@@ -16,7 +16,7 @@ import {
   providedIn: "root"
 })
 export class AuthorizationService {
-  login_url = "http://localhost:3000/api/user/login"; // http://localhost:4200/backend/login";
+  login_url = "http://localhost:3000/api/user/login";
   register_url = "http://localhost:3000/api/user/register";
   verify_url = "http://localhost:3000/api/user/verify";
   private currentUserSubject: BehaviorSubject<User>;

@@ -1,0 +1,28 @@
+<h2>My Meetings</h2>
+<ul>
+    <mat-list class="list-group">
+        <div mat-subheader>Meetings</div>
+        <mat-list-item class="border" *ngFor="let meeting of meetings">
+            <mat-icon mat-list-icon>group</mat-icon>
+            <div mat-line>ID MEETING: {{meeting._id}}</div>
+            <div mat-line>Title: {{meeting.title}}</div>
+            <div mat-line>When: {{meeting.when}} </div>
+            <div mat-line>Link: {{meeting.link}} </div>
+            <div mat-line>ID USER: {{meeting.user_id}} </div>
+
+            <button mat-stroked-button (click)="openEditMeetingDialog(meeting)">
+                <mat-icon [ngStyle]="{'color':'#006ECF'}">edit</mat-icon>
+            </button>
+            <button mat-stroked-button (click)="deleteMeeting(meeting)">
+                <mat-icon [ngStyle]="{'color':'#CB2400'}">delete</mat-icon>
+            </button>
+
+        </mat-list-item>
+
+
+    </mat-list>
+
+</ul>
+<div>
+    <button mat-raised-button color="primary" (click)="openAddNewMeetingDialog()">+ Add new meeting</button>
+</div>
